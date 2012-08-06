@@ -13,6 +13,7 @@ use warnings;
 use Bugzilla::Constants;
 use Bugzilla::Extension::Push::Util;
 use Bugzilla::Version;
+use Bugzilla::Util;
 
 use Scalar::Util 'blessed';
 use JSON;
@@ -136,7 +137,7 @@ sub _custom_field {
 
     } elsif ($field->type == FIELD_TYPE_MULTI_SELECT) {
         # XXX
-        die "not implemented";
+        return _string($value);
 
     } else {
         return _string($value);
@@ -285,6 +286,18 @@ sub _status {
     return {
         id   => _integer($status->id),
         name => _string($status->name),
+    };
+}
+
+sub _comment {
+    my ($self, $comment) = @_;
+    return {
+        id               => _integer($comment->id),
+        bug              => $self->_bug($comment->bug),
+        # comment          => _string(html_quote($comment->body)),
+        comment          => _string('intentially removed'),
+        work_time        => _integer($comment->work_time),
+        commenter        => $self->_user($comment->author),
     };
 }
 

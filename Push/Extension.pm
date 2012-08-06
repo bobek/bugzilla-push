@@ -141,7 +141,7 @@ sub _get_object_from_args {
 sub _should_push {
     my ($object) = @_;
     my $class = blessed($object);
-    return grep { $_ eq $class } qw(Bugzilla::Bug Bugzilla::Attachment);
+    return grep { $_ eq $class } qw(Bugzilla::Bug Bugzilla::Attachment Bugzilla::Comment);
 }
 
 # changes to bug flags are presented in a single field 'flagtypes.name' split

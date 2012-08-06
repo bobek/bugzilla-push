@@ -30,6 +30,8 @@ our @EXPORT = qw(
 sub is_public {
     my ($object) = @_;
 
+    return 1;
+
     my $default_user = Bugzilla::User->new();
 
     if ($object->isa('Bugzilla::Bug')) {
