@@ -51,9 +51,18 @@ sub send {
     if (utf8::is_utf8($payload)) {
         $payload = encode('utf8', $payload);
     }
-    my $rh = from_json($payload);
-    $payload = $json->pretty->encode($rh);
 
+    my $rh;
+
+    eval {
+      $rh = from_json($payload);
+    };
+    if ($@) {
+        Bugzilla->push_ext->logger->error("From JSON failed.");
+        return PUSH_RESULT_ERROR;
+    };
+
+    $payload = $json->pretty->encode($rh);
     my $filename = bz_locations()->{'datadir'} . '/' . $self->config->{filename};
     Bugzilla->push_ext->logger->debug("File: Appending to $filename");
     my $fh = FileHandle->new(">>$filename");
